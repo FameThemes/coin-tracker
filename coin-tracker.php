@@ -465,10 +465,10 @@ function coin_tracker_get_data( $num_days, $code = 'BCC' ){
     foreach ( $rows as $index => $r ) {
         $r_date = strtotime( $r->add_date );
         $n = $english_format_number = number_format( $r->interest_rate, 2, '.', '');
-        $date = date( 'Y-m-d', $r_date );
+        $date = date( 'd-m-Y', $r_date );
         $new_data[ $index ] = array(
             'date' => $date,
-            'status' => $r_date > $now_timestamp ? 'pending': 'approved',
+            'status' => $r_date > $now_timestamp ? 'Đang chờ': 'Chấp nhận',
             'interest_rate_format' => $n,
             'interest_rate' =>  $r->interest_rate,
         );
@@ -492,9 +492,9 @@ function coin_tracker_last_days( $atts ) {
             $content .='<div class="ct_history_item_inner">';
             $content .= '<div class="ct_rate"><strong>'.$r['interest_rate_format'].'%</strong></div>';
 
-            $content .= '<div class="ct_date"><i class="fa fa-calendar"></i> '.( $r['date'] == date_i18n( 'Y-m-d' )  ? 'Today' : $r['date'] ) .'</div>';
+            $content .= '<div class="ct_date"><i class="fa fa-calendar"></i> '.( $r['date'] == date_i18n( 'd-m-Y' )  ? 'Hôm nay' : $r['date'] ) .'</div>';
 
-            if (  $r['status'] == 'approved' ) {
+            if (  $r['status'] == 'Chấp nhận' ) {
                 $content .= '<div class="ct_status ct_approved"><i class="fa fa-check-circle fa-lg"></i> '.ucfirst( $r['status'] ).' </div>';
 
             } else {
@@ -551,7 +551,7 @@ function coin_tracker_interest_rate_last_30_days( $atts ){
     foreach ( $data as $k=> $d ) {
         $content.= '<div class="coin_tracker_rate_package">';
             $content .= '<div class="ctp_name" >'.$d['plan_name'].'</div>';
-            $content .= '<div class="ctp_value">'.round( $d['rate'], 2 ).'%</div>';
+            $content .= '<div class="ctp_value">'.$d['rate'].'%</div>';
         $content.= '</div>';
     }
 

@@ -11,12 +11,12 @@
     padding: 15px 10px;
 }
 .ctp_name {
-    font-size: 80%;
+    font-size: 95%;
     font-weight: bold;
 }
 .ctp_value {
     font-weight: bold;
-    color: red;
+    color: #7ac143;
     margin-top: 10px;
 }
 
@@ -47,14 +47,19 @@
 }
 
 .ct_history_item_inner  .ct_date {
-    font-size: 80%;
+    font-size: 90%;
     margin: 10px 0;
 }
-.ct_history_item_inner .ct_status {
+.ct_history_item_inner  .ct_date i {
     font-size: 80%;
+    position: relative;
+    top: -1px;
+}
+.ct_history_item_inner .ct_status {
+    font-size: 90%;
 }
 .ct_history_item_inner .ct_status.ct_approved  i{
-    color: #5ca21f;
+    color: #7ac143;
 }
 
 .ct_history_item_inner .ct_status.ct_pending  i{
