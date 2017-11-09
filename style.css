@@ -1,0 +1,74 @@
+.coin_tracker_rate_packages {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+.coin_tracker_rate_packages .coin_tracker_rate_package{
+    display: table-cell;
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-collapse: collapse;
+    padding: 15px 10px;
+}
+.ctp_name {
+    font-size: 80%;
+    font-weight: bold;
+}
+.ctp_value {
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+}
+
+.coin_tracker_history:after {
+    clear: both;
+    content: " "; display: block;
+}
+.coin_tracker_history {
+    margin: -5px;
+    box-sizing: border-box;
+}
+.coin_tracker_history * {
+    box-sizing: border-box;
+}
+.coin_tracker_history .ct_history_item{
+    width: 20%;
+    float: left;
+    padding: 5px 5px;
+    text-align: center;
+}
+
+.ct_history_item_inner {
+    border: 1px dashed #cccccc;
+    padding: 15px 0px;
+}
+.ct_history_item_inner .ct_rate {
+
+}
+
+.ct_history_item_inner  .ct_date {
+    font-size: 80%;
+    margin: 10px 0;
+}
+.ct_history_item_inner .ct_status {
+    font-size: 80%;
+}
+.ct_history_item_inner .ct_status.ct_approved  i{
+    color: #5ca21f;
+}
+
+.ct_history_item_inner .ct_status.ct_pending  i{
+    color: #d6b46b;
+}
+
+@media screen and (max-width: 700px) {
+    .coin_tracker_history .ct_history_item{
+        width: 25%;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .coin_tracker_history .ct_history_item{
+        width: 33.33333333%;
+    }
+}

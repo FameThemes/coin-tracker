@@ -73,28 +73,28 @@ function coin_tracker_get_config(){
             array(
                 'min'=> 100,
                 'max' => 9990,
-                'bonus' => 0,
+                'daily_interest' => 0, // 1% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
             array(
                 'min'=> 10000,
                 'max' => 24990,
-                'bonus' => 0.1,
+                'daily_interest' => 0.0090909, // 1% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
             array(
                 'min'=> 25000,
                 'max' => 49990,
-                'bonus' => 0.13,
+                'daily_interest' => 0.011818,
                 'every' => 11,
                 'capital_back' => 99
             ),
             array(
                 'min'=> 50000,
                 'max' => 100000,
-                'bonus' => 0.16,
+                'daily_interest' => 0.014546, // 1.6% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
@@ -154,11 +154,14 @@ class Coin_Tracker_Options {
         $this->url = admin_url( 'admin.php?page=coin_tracker' );
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
-
-
-
             add_action( 'init', array( $this, 'actions' ) );
+        } else {
+            add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
         }
+    }
+
+    function frontend_scripts(){
+        wp_enqueue_style( 'coin_tracker', plugins_url( 'style.css', __FILE__ ) );
     }
 
     function actions(){
@@ -256,6 +259,8 @@ class Coin_Tracker_Options {
         return $id;
 
     }
+
+
 
     function scripts(){
         wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -432,6 +437,7 @@ include dirname( __FILE__ ).'/api.php';
 
 
 function coin_tracker_get_data( $num_days, $code = 'BCC' ){
+    $num_days = intval( $num_days );
     $now_timestamp = current_time('timestamp');
     $last_n_days = $now_timestamp - $num_days*DAY_IN_SECONDS;
     $now = date( 'Y-m-d', $last_n_days );
@@ -443,9 +449,11 @@ function coin_tracker_get_data( $num_days, $code = 'BCC' ){
                 FROM {$wpdb->prefix}coin_tracker
                 WHERE DATE(add_date) >= %s AND coin_code = %s
                 ORDER BY add_date DESC
+                LIMIT %d
             ",
         $now,
-        $code
+        $code,
+        $num_days
     ) );
 
     if ( ! is_array( $rows ) ) {
@@ -482,17 +490,19 @@ function coin_tracker_last_days( $atts ) {
 
     foreach ( $rows as $r ) {
         $content .= '<div class="ct_history_item text-center">';
-            $content .= '<div><strong>'.$r['interest_rate_format'].'%</strong></div>';
+            $content .='<div class="ct_history_item_inner">';
+            $content .= '<div class="ct_rate"><strong>'.$r['interest_rate_format'].'%</strong></div>';
 
-            $content .= '<div><i class="fa fa-calendar"></i> '.( $r['date'] == date_i18n( 'Y-m-d' )  ? 'Today' : $r['date'] ) .'</div>';
+            $content .= '<div class="ct_date"><i class="fa fa-calendar"></i> '.( $r['date'] == date_i18n( 'Y-m-d' )  ? 'Today' : $r['date'] ) .'</div>';
 
             if (  $r['status'] == 'approved' ) {
-                $content .= '<div class="ct_approved"><i class="fa fa-check-circle fa-lg"></i> '.ucfirst( $r['status'] ).' </div>';
+                $content .= '<div class="ct_status ct_approved"><i class="fa fa-check-circle fa-lg"></i> '.ucfirst( $r['status'] ).' </div>';
 
             } else {
-                $content .= '<div class="ct_pending"><i class="fa fa-clock-o text-warning fa-lg"></i> '.ucfirst( $r['status'] ).' </div>';
+                $content .= '<div class="ct_status ct_pending"><i class="fa fa-clock-o text-warning fa-lg"></i> '.ucfirst( $r['status'] ).' </div>';
             }
 
+            $content .= '</div>';
         $content .= '</div>';
     }
 
@@ -522,9 +532,9 @@ function coin_tracker_interest_rate_last_30_days( $atts ){
     foreach ( $packages[ $a['coin'] ] as $index => $plan ) {
         $rate = 0;
         if ( ! $plan['max'] ) {
-            $data[ $index ]['plan_name'] = '$'.$plan['min'].' Above';
+            $data[ $index ]['plan_name'] = '$'.number_format( $plan['min'], 0, '.', ',' ).' Above';
         } else {
-            $data[ $index ]['plan_name'] = '$'.$plan['min'].' - $'.$plan['max'];
+            $data[ $index ]['plan_name'] = '$'.number_format( $plan['min'], 0 ).' - $'.number_format( $plan['max'], 0 );
         }
 
         foreach ( $rows as $r ) {
@@ -542,7 +552,7 @@ function coin_tracker_interest_rate_last_30_days( $atts ){
     foreach ( $data as $k=> $d ) {
         $content.= '<div class="coin_tracker_rate_package">';
             $content .= '<div class="ctp_name" >'.$d['plan_name'].'</div>';
-            $content .= '<div class="ctp_value">'.$d['rate'].'%</div>';
+            $content .= '<div class="ctp_value">'.round( $d['rate'], 2 ).'%</div>';
         $content.= '</div>';
     }
 
