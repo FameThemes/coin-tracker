@@ -63,7 +63,7 @@ function coin_tracker_get_config(){
                 'capital_back' => 120
             ),
             array(
-                'min'=> 1000010,
+                'min'=> 100010,
                 'max' => null,
                 'daily_interest' => 0.035,
                 'capital_back' => 120
@@ -447,11 +447,10 @@ function coin_tracker_get_data( $num_days, $code = 'BCC' ){
         "
                 SELECT *
                 FROM {$wpdb->prefix}coin_tracker
-                WHERE DATE(add_date) >= %s AND coin_code = %s
+                WHERE coin_code = %s
                 ORDER BY add_date DESC
-                LIMIT %d
+                LIMIT  %d
             ",
-        $now,
         $code,
         $num_days
     ) );
