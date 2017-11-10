@@ -21,19 +21,19 @@ function coin_tracker_get_config(){
             array(
                 'min'=> 1010,
                 'max' => 5000,
-                'daily_interest' => 0.01,
+                'daily_interest' => 0.1,
                 'capital_back' => 239
             ),
             array(
                 'min'=> 5010,
                 'max' => 10000,
-                'daily_interest' => 0.02,
+                'daily_interest' => 0.2,
                 'capital_back' => 239
             ),
             array(
                 'min'=> 10010,
                 'max' => 100000,
-                'daily_interest' => 0.025,
+                'daily_interest' => 0.25,
                 'capital_back' => 120
             )
         ),
@@ -47,25 +47,25 @@ function coin_tracker_get_config(){
             array(
                 'min'=> 1010,
                 'max' => 5000,
-                'daily_interest' => 0.015,
+                'daily_interest' => 0.15,
                 'capital_back' => 179
             ),
             array(
                 'min'=> 5010,
                 'max' => 10000,
-                'daily_interest' => 0.025,
+                'daily_interest' => 0.25,
                 'capital_back' => 120
             ),
             array(
                 'min'=> 10010,
                 'max' => 100000,
-                'daily_interest' => 0.030,
+                'daily_interest' => 0.30,
                 'capital_back' => 120
             ),
             array(
                 'min'=> 100010,
                 'max' => null,
-                'daily_interest' => 0.035,
+                'daily_interest' => 0.35,
                 'capital_back' => 120
             ),
         ),
@@ -80,21 +80,21 @@ function coin_tracker_get_config(){
             array(
                 'min'=> 10000,
                 'max' => 24990,
-                'daily_interest' => 0.0090909, // 1% every 11 days
+                'daily_interest' => 0.90909, // 1% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
             array(
                 'min'=> 25000,
                 'max' => 49990,
-                'daily_interest' => 0.011818,
+                'daily_interest' => 0.11818, // 1.3% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
             array(
                 'min'=> 50000,
                 'max' => 100000,
-                'daily_interest' => 0.014546, // 1.6% every 11 days
+                'daily_interest' => 0.14546, // 1.6% every 11 days
                 'every' => 11,
                 'capital_back' => 99
             ),
