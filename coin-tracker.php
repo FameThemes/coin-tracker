@@ -607,6 +607,30 @@ function coin_tracker_bcc_to_usd( $atts ){
     return '<span class="coin_bcc_to_usd">......</span>';
 }
 
+function coin_tracker_rec_to_usd(){
+    // https://api.coinmarketcap.com/v1/ticker/regalcoin/
+    $key = 'coin_tracker_get_regalcoin';
+    $data = get_transient( $key );
+    if ( false === $data ) {
+        $url = 'https://api.coinmarketcap.com/v1/ticker/regalcoin/';
+        $r = wp_remote_get($url);
+        $data = wp_remote_retrieve_body($r);
+        $data = json_decode($data, true);
+        if ( is_array($data)) {
+            $data = $data[0];
+            set_transient($key, 5 * 50);
+        }
+    }
+
+    if ( ! isset( $data['price_usd'] ) ) {
+        return '';
+    }
+
+    return '<span class="coin_rec_to_usd">'.esc_html(  $data['price_usd'] ).'</span>';
+}
+add_shortcode( 'coin_rec_to_usd', 'coin_tracker_rec_to_usd' );
+
+
 add_shortcode( 'coin_date', 'coin_tracker_coin_date' );
 function coin_tracker_coin_date( $atts ){
     return date_i18n('H:i:s d-m-Y');
