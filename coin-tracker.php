@@ -576,13 +576,23 @@ function wp_ajax_coin_tracker_load_content() {
     global $wpdb; // this is how you get access to the database
     $url = esc_url( $_GET['url'] );
 
+    $time = 5*60; // 5 mins
+    $key = 'cache_'.$url;
+    if( get_transient( $key ) !== false ) {
+        echo get_transient( $key );
+        return ;
+    }
     $r = wp_remote_get( $url );
     $html = wp_remote_retrieve_body( $r );
 
     preg_match("/<body[^>]*>(.*?)<\/body>/is", $html, $matches);
+    $content = '';
     if( $matches ) {
-        echo $matches[1];
+        $content = $matches[1];
+        echo $content;
     }
+
+    set_transient( $key, $content, $time );
 
     wp_die(); // this is required to terminate immediately and return a proper response
 }
