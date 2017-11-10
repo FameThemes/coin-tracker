@@ -162,6 +162,10 @@ class Coin_Tracker_Options {
 
     function frontend_scripts(){
         wp_enqueue_style( 'coin_tracker', plugins_url( 'style.css', __FILE__ ) );
+        wp_enqueue_script( 'coin_tracker', plugins_url( 'js.js', __FILE__ ), array( 'jquery' ) );
+        wp_localize_script( 'coin_tracker', 'coin_tracker', array(
+            'ajax_url' => admin_url('admin-ajax.php')
+        ) );
     }
 
     function actions(){
@@ -565,3 +569,30 @@ function coin_tracker_interest_rate_last_30_days( $atts ){
 add_shortcode( 'coin_tracker_interest_rate_30', 'coin_tracker_interest_rate_last_30_days' );
 
 
+
+add_action( 'wp_ajax_coin_tracker_load_content', 'wp_ajax_coin_tracker_load_content' );
+
+function wp_ajax_coin_tracker_load_content() {
+    global $wpdb; // this is how you get access to the database
+    $url = esc_url( $_GET['url'] );
+
+    $r = wp_remote_get( $url );
+    $html = wp_remote_retrieve_body( $r );
+
+    preg_match("/<body[^>]*>(.*?)<\/body>/is", $html, $matches);
+    if( $matches ) {
+        echo $matches[1];
+    }
+
+    wp_die(); // this is required to terminate immediately and return a proper response
+}
+
+add_shortcode( 'coin_btc_to_usd', 'coin_tracker_btc_to_usd' );
+
+function coin_tracker_btc_to_usd( $atts ){
+    return '<span class="coin_btc_to_usd">......</span>';
+}
+add_shortcode( 'coin_bcc_to_usd', 'coin_tracker_bcc_to_usd' );
+function coin_tracker_bcc_to_usd( $atts ){
+    return '<span class="coin_bcc_to_usd">......</span>';
+}
