@@ -606,3 +606,8 @@ add_shortcode( 'coin_bcc_to_usd', 'coin_tracker_bcc_to_usd' );
 function coin_tracker_bcc_to_usd( $atts ){
     return '<span class="coin_bcc_to_usd">......</span>';
 }
+
+add_shortcode( 'coin_date', 'coin_tracker_coin_date' );
+function coin_tracker_coin_date( $atts ){
+    return date_i18n('H:i:s d-m-Y');
+}
